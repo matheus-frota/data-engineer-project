@@ -12,8 +12,9 @@ QUERY_EMPRESA = """INSERT INTO empresa(
             cod_qualificacao_do_responsavel,
             capital_social,
             cod_porte_da_empresa,
-            desc_ente_federativo_responsavel)
-            values (%s, %s, %s, %s, %s, %s, %s)
+            desc_ente_federativo_responsavel,
+            created_at)
+            values (%s, %s, %s, %s, %s, %s, %s, %s)
         """
 
 QUERY_ESTABELECIMENTO = """INSERT INTO estabelecimento(
@@ -88,7 +89,8 @@ def insert_table_empresa(conn):
                 row.cod_qualificacao_do_responsavel,
                 row.capital_social,
                 row.cod_porte_da_empresa,
-                row.desc_ente_federativo_responsavel))
+                row.desc_ente_federativo_responsavel,
+                row.created_at))
         except Exception as e:
             print(e)
             print(row)

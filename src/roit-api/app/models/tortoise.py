@@ -1,4 +1,5 @@
 from tortoise import fields, models
+from tortoise.contrib.pydantic import pydantic_model_creator
 
 
 class Empresa(models.Model):
@@ -9,6 +10,10 @@ class Empresa(models.Model):
     capital_social = fields.TextField(null=True)
     cod_porte_da_empresa = fields.TextField(null=True)
     desc_ente_federativo_responsavel = fields.TextField(max_length=128, null=True)
+    created_at = fields.DateField()
 
     def __str__(self):
         return self.razao_social
+
+
+EmpresaSchema = pydantic_model_creator(Empresa)
