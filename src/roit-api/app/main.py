@@ -2,7 +2,7 @@ import logging
 
 from fastapi import FastAPI
 
-from app.api import ping, empresas
+from app.api import ping, empresas, estabelecimentos
 from app.db import init_db
 
 
@@ -13,6 +13,7 @@ def create_application() -> FastAPI:
     application = FastAPI()
     application.include_router(ping.router)
     application.include_router(empresas.router, prefix="/empresas", tags=["empresas"])
+    application.include_router(estabelecimentos.router, prefix="/estabelecimentos", tags=["estabelecimentos"])
 
     return application
 

@@ -11,7 +11,7 @@ router = APIRouter()
 
 @router.get("/{created_at}/", response_model=List[EmpresaSchema])
 async def read_all_empresas_by_date(created_at: str) -> List[EmpresaSchema]:
-    empresa = await crud.get(created_at)
+    empresa = await crud.get_empresas(created_at)
     if not empresa:
         raise HTTPException(status_code=404, detail=f"Empresas não encontradas para {created_at}")
 

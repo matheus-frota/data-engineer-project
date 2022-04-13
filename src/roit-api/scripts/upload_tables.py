@@ -18,6 +18,7 @@ QUERY_EMPRESA = """INSERT INTO empresa(
         """
 
 QUERY_ESTABELECIMENTO = """INSERT INTO estabelecimento(
+            cnpj_basico,
             cnpj_ordem,
             cnpj_dv,
             cod_identificador_matriz_filial,
@@ -46,10 +47,11 @@ QUERY_ESTABELECIMENTO = """INSERT INTO estabelecimento(
             fax,
             email,
             cod_situacao_especial,
-            data_situacao_especial)
+            data_situacao_especial,
+            created_at)
             values (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
             %s, %s, %s, %s, %s, %s, %s, %s, %s, %s,
-            %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
         """
 
 
@@ -74,39 +76,35 @@ def load_file(name):
     return pd.read_csv(f'./data/{name}.csv').astype(str)
 
 
-def insert_table_empresa(conn):
+def insert_table(conn, table, query):
     values = []
     cursor = conn.cursor()
     print("Iniciando inserção de dados...")
-    df = load_file("empresa")
+    df = load_file(table)
     
     for row in df.itertuples():
         try:
-            values.append((
-                row.cnpj_basico,
-                row.razao_social,
-                row.cod_natureza_juridica,
-                row.cod_qualificacao_do_responsavel,
-                row.capital_social,
-                row.cod_porte_da_empresa,
-                row.desc_ente_federativo_responsavel,
-                row.created_at))
+            values.append(
+                tuple(getattr(row, col) for col in df.columns)
+            )
         except Exception as e:
             print(e)
             print(row)
             break
     
-    cursor.executemany(QUERY_EMPRESA, values)
+    cursor.executemany(query, values)
 
     conn.commit()
 
     cursor.close()
-    
 
 
 if __name__ == "__main__":
     conn = connect()
+    conn2 = connect()
 
-    insert_table_empresa(conn)
+    insert_table(conn, 'empresa', QUERY_EMPRESA)
+    insert_table(conn2, 'estabelecimento', QUERY_ESTABELECIMENTO)
 
     conn.close()
+    conn2.close()
