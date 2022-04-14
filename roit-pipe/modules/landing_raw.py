@@ -2,7 +2,7 @@ from uuid import uuid1
 
 import requests
 
-from io_minio import write_on_layer, read_json_on_layer, delete_on_layer
+from modules.io_minio import write_on_layer, read_json_on_layer, delete_on_layer
 
 
 def get(route, date):
@@ -10,6 +10,20 @@ def get(route, date):
     if response.status_code == 200:
         return response.json()
     return None
+
+
+def ingest_landing(route, date):
+    delete_on_layer("landing", route)
+    responses = get(route, date)
+    for i, r in enumerate(responses):
+        write_on_layer(f"{uuid1()}.json", r, "landing", route)
+        if i in [1000, 5000, 10000, 15000, 20000]:
+            print(i)
+
+
+def ingest_raw(route):
+    df = read_json_on_layer("landing", ingest_raw)
+    write_on_layer(f"{uuid1()}.csv", df, "raw", ingest_raw)
 
 
 if __name__ == "__main__":
