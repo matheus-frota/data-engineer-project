@@ -1,3 +1,4 @@
 minio
 requests
 python-dotenv
+pandas
