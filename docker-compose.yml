@@ -41,13 +41,13 @@ services:
             - DEFAULT_BUCKET=${MINIO_DEFAULT_BUCKET}
         command: server --console-address ":9001" /data
 
-  pipe-db:
-        build: 
-          context: ./roit-pipe/db
-          dockerfile: Dockerfile
-        command: --default-authentication-plugin=mysql_native_password
-        restart: always
-        expose:
-          - 8080
-        environment:
-          - MYSQL_ROOT_PASSWORD: pass
+#   pipe-db:
+#         build: 
+#           context: ./roit-pipe/db
+#           dockerfile: Dockerfile
+#         command: --default-authentication-plugin=mysql_native_password
+#         restart: always
+#         expose:
+#           - 8080
+#         environment:
+#           - MYSQL_ROOT_PASSWORD: pass
